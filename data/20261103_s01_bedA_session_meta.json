@@ -1,0 +1,22 @@
+{
+  "session_id": "20261103_s01",
+  "bed_id": "A",
+  "pseudo_id": "P001",
+  "device": "SolCare Sensor v0.1 (prototype)",
+  "frequency_band_ghz": 60,
+  "sampling_rate_hz": 1,
+  "timezone": "Asia/Seoul",
+  "window": {
+    "start": "2026-11-03T21:47:00",
+    "end": "2026-11-04T06:31:59"
+  },
+  "report_ref": {
+    "report_generated_at": "2026-11-04T06:02:00+09:00",
+    "sleep_score": 82,
+    "sleep_efficiency_pct": 83,
+    "total_sleep_min": 434,
+    "wake_min": 91
+  },
+  "data_policy": "합성 샘플 데이터. 실명·영상·음성 없음. 가명 ID만 사용.",
+  "note": "결과지 양식 예시용. 실측 전환 시 동일 스키마 사용."
+}
