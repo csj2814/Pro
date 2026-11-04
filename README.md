@@ -118,7 +118,7 @@ mmwave-care/
 | 문서 | 위치 | 상태 |
 |---|---|---|
 | 사업 모델 설계 | [docs/business-model.md](docs/business-model.md) | 작성 예정 (11/6 최종) |
-| 사용자 시나리오 | [docs/user-scenario.md](docs/user-scenario.md) | 작성 예정 (11/4) |
+| 사용자 시나리오 | [docs/user-scenario.md](docs/user-scenario.md) | 작성 완료 |
 | 회의록 1~4회 | [docs/meetings/](docs/meetings/) | 정리 중 (대회 기간 논의 기반) |
 | 데이터 수집 가이드 | [data/docs/data-collection-guide.md](data/docs/data-collection-guide.md) | 초안 (11/4) |
 | 라벨링 표준 | [data/docs/labeling-standard.md](data/docs/labeling-standard.md) | 초안 (11/7 v1.0 확정) |
