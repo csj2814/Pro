@@ -121,7 +121,7 @@ mmwave-care/
 | 사용자 시나리오 | [docs/user-scenario.md](docs/user-scenario.md) | 작성 완료 |
 | 회의록 1~4회 | [docs/meetings/](docs/meetings/) | 정리 완료 |
 | 데이터 수집 가이드 | [data/docs/data-collection-guide.md](data/docs/data-collection-guide.md) | 작성 완료|
-| 라벨링 표준 | [data/docs/labeling-standard.md](data/docs/labeling-standard.md) | 초안 (11/7 v1.0 확정) |
+| 라벨링 표준 | [data/docs/labeling-standard.md](data/docs/labeling-standard.md) | 작성 완료 |
 
 ## 커밋 규칙
 
