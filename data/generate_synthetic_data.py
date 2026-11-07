@@ -14,7 +14,7 @@ from pathlib import Path
 
 
 SEED = 20261104
-ROWS_PER_SUBJECT = 120
+ROWS_PER_SUBJECT = 240
 LABELS = {
     "normal": 0,
     "apnea": 1,
@@ -132,9 +132,9 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
 def main() -> None:
     output_dir = Path(__file__).resolve().parent / "samples"
     split_subjects = {
-        "train": range(1, 19),
-        "validation": range(19, 25),
-        "test": range(25, 31),
+        "train": range(1, 55),
+        "validation": range(55, 73),
+        "test": range(73, 91),
     }
     for split, subjects in split_subjects.items():
         rows = [row for subject in subjects for row in make_subject_rows(subject, split)]
