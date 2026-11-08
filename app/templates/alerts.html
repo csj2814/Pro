@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>알림</h1>
+<p class="who">{{ r.pseudo_id }} · {{ r.start[5:10] }} 밤</p>
+<section class="card">
+  {% if r.alerts %}
+    <ul class="alerts">
+      {% for a in r.alerts %}
+      <li class="{{ a.level }}"><time>{{ a.time }}</time><div><b>{{ a.title }}</b><p>{{ a.text }}</p></div></li>
+      {% endfor %}
+    </ul>
+  {% else %}<p class="muted">특이 알림이 없었어요.</p>{% endif %}
+</section>
+<p class="notice">알림은 진단이 아니라 보호자가 확인할 '관찰 대상'이에요.</p>
+{% endblock %}

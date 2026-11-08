@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SolCare 보호자 앱</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="top"><span class="logo"><b class="sol">Sol</b><b class="care">Care</b></span></header>
+  <main>{% block body %}{% endblock %}</main>
+  <nav class="tabs">
+    {% for href, name in nav %}
+      <a href="{{ href }}" class="{{ 'on' if active == href else '' }}">{{ name }}</a>
+    {% endfor %}
+  </nav>
+</body>
+</html>
