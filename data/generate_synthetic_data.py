@@ -9,6 +9,7 @@ from __future__ import annotations
 import csv
 import math
 import random
+from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -49,6 +50,7 @@ FIELDS = [
     "label",
     "severity",
 ]
+NUMERIC_FEATURES = FIELDS[6:12]
 
 
 def clipped_gauss(rng: random.Random, mean: float, std: float, low: float, high: float) -> float:
@@ -129,6 +131,57 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
         writer.writerows(rows)
 
 
+def percentile(values: list[float], quantile: float) -> float:
+    """Return a linearly interpolated percentile for a non-empty sequence."""
+    ordered = sorted(values)
+    position = (len(ordered) - 1) * quantile
+    lower_index = int(position)
+    upper_index = min(lower_index + 1, len(ordered) - 1)
+    fraction = position - lower_index
+    return ordered[lower_index] * (1 - fraction) + ordered[upper_index] * fraction
+
+
+def calculate_iqr_bounds(
+    training_rows: list[dict[str, object]],
+) -> dict[str, dict[str, tuple[float, float]]]:
+    """Learn label-specific 1.5 IQR bounds from the training split only."""
+    grouped: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
+    for row in training_rows:
+        label = str(row["label"])
+        for feature in NUMERIC_FEATURES:
+            grouped[label][feature].append(float(row[feature]))
+
+    bounds: dict[str, dict[str, tuple[float, float]]] = {}
+    for label, features in grouped.items():
+        bounds[label] = {}
+        for feature, values in features.items():
+            first_quartile = percentile(values, 0.25)
+            third_quartile = percentile(values, 0.75)
+            iqr = third_quartile - first_quartile
+            bounds[label][feature] = (
+                first_quartile - 1.5 * iqr,
+                third_quartile + 1.5 * iqr,
+            )
+    return bounds
+
+
+def remove_outliers(
+    rows: list[dict[str, object]],
+    bounds: dict[str, dict[str, tuple[float, float]]],
+) -> list[dict[str, object]]:
+    """Remove rows with any numeric feature outside its label-specific bounds."""
+    return [
+        row
+        for row in rows
+        if all(
+            bounds[str(row["label"])][feature][0]
+            <= float(row[feature])
+            <= bounds[str(row["label"])][feature][1]
+            for feature in NUMERIC_FEATURES
+        )
+    ]
+
+
 def main() -> None:
     output_dir = Path(__file__).resolve().parent / "samples"
     split_subjects = {
@@ -136,10 +189,20 @@ def main() -> None:
         "validation": range(55, 73),
         "test": range(73, 91),
     }
-    for split, subjects in split_subjects.items():
-        rows = [row for subject in subjects for row in make_subject_rows(subject, split)]
+    raw_splits = {
+        split: [row for subject in subjects for row in make_subject_rows(subject, split)]
+        for split, subjects in split_subjects.items()
+    }
+    bounds = calculate_iqr_bounds(raw_splits["train"])
+
+    for split, raw_rows in raw_splits.items():
+        rows = remove_outliers(raw_rows, bounds)
         write_csv(output_dir / f"{split}.csv", rows)
-        print(f"{split}: {len(rows)} rows -> {output_dir / f'{split}.csv'}")
+        print(
+            f"{split}: {len(rows)} rows "
+            f"({len(raw_rows) - len(rows)} outliers removed) -> "
+            f"{output_dir / f'{split}.csv'}"
+        )
 
 
 if __name__ == "__main__":
