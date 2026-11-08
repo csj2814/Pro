@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block body %}
+<p class="who">{{ r.pseudo_id }} · 침대 {{ r.bed_id }} · {{ r.start[5:10] }} 밤</p>
+
+<section class="card hero {{ r.tone }}">
+  <div class="score"><span class="num">{{ r.score }}</span><span class="unit">점</span></div>
+  <div class="label">{{ r.score_label }}</div>
+  <p class="summary">{{ r.summary }}</p>
+</section>
+
+<section class="grid">
+  <div class="card stat"><span>총 수면</span><b>{{ r.total_h }}<small>시간</small></b></div>
+  <div class="card stat"><span>수면 효율</span><b>{{ r.efficiency|round|int }}<small>%</small></b></div>
+  <div class="card stat"><span>평균 심박</span><b>{{ r.avg_hr or '-' }}<small>bpm</small></b></div>
+  <div class="card stat"><span>평균 호흡</span><b>{{ r.avg_resp or '-' }}<small>회/분</small></b></div>
+</section>
+
+<section class="card">
+  <h2>어젯밤 알림 <small>{{ r.alerts|length }}건</small></h2>
+  {% if r.alerts %}
+    <ul class="alerts">
+      {% for a in r.alerts %}
+      <li class="{{ a.level }}"><time>{{ a.time }}</time><div><b>{{ a.title }}</b><p>{{ a.text }}</p></div></li>
+      {% endfor %}
+    </ul>
+  {% else %}<p class="muted">특이 알림이 없었어요.</p>{% endif %}
+</section>
+
+<section class="card">
+  <h2>수면 단계</h2>
+  <div class="bar">
+    {% for s in r.stages %}<span class="seg {{ s.key }}" style="flex: {{ s.pct }}" title="{{ s.name }} {{ s.pct }}%"></span>{% endfor %}
+  </div>
+  <ul class="legend">
+    {% for s in r.stages %}<li><i class="dot {{ s.key }}"></i>{{ s.name }} <b>{{ s.pct }}%</b> <small>{{ s.min }}분</small></li>{% endfor %}
+  </ul>
+  <p class="muted">뒤척임 {{ r.toss_n }}회 · 깨어 있던 시간 {{ r.wake_min }}분</p>
+</section>
+
+<p class="notice">
+  영상·음성·이름은 저장하지 않고 신호 수치만 사용해요. 이 리포트는 생활 관찰용이며 의학적 진단을 대체하지 않아요.
+  {% if r.is_synthetic %}<br>※ 합성 샘플 데이터예요.{% endif %}
+</p>
+{% endblock %}

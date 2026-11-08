@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="card">
+  <h2>DB 파일을 찾을 수 없어요</h2>
+  <p class="muted">{{ path }}</p>
+  <p>먼저 데이터를 넣어 주세요.</p>
+  <pre>python server/db/import_session.py solcare.db 
+  &lt;vitals.csv&gt; &lt;events.csv&gt; &lt;meta.json&gt;</pre>
+</section>
+{% endblock %}

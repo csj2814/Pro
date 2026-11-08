@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>기록</h1>
+{% for s in sessions %}
+<a class="card row" href="/report/{{ s.session_id }}">
+  <div><b>{{ s.start_time[5:10] }} 밤</b><p class="muted">{{ s.pseudo_id }} · 침대 {{ s.bed_id }} · {{ (s.total_sleep_min / 60)|round(1) }}시간</p></div>
+  <div class="pill {{ s.tone }}">{{ s.sleep_score }}점 {{ s.label }}</div>
+</a>
+{% endfor %}
+{% if sessions|length < 2 %}<p class="muted">기록이 쌓이면 이전 날과 비교할 수 있어요.</p>{% endif %}
+{% endblock %}
